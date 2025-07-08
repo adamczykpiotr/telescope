@@ -227,7 +227,12 @@ export default {
             if (this.resource !== 'jobs') return;
 
             this.updateEntriesTimeout = setTimeout(() => {
-                let uuids = _.chain(this.entries).filter(entry => entry.content.status === 'pending').map('id').value();
+                console.warn(this.entries);
+                let uuids = _.chain(this.entries)
+                    .forEach(entry => console.warn(entry))
+                    .filter(entry => entry?.content?.status === 'pending')
+                    .map('id')
+                    .value();
 
                 if (uuids.length) {
                     axios.post(Telescope.basePath + '/telescope-api/' + this.resource, {
