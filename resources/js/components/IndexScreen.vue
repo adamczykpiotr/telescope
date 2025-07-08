@@ -100,6 +100,11 @@
                     this.ready = true;
                 });
             },
+
+            entries: function () {
+                console.error(this.entries);
+                window.z = this.entries;
+            }
         },
 
 
@@ -227,9 +232,8 @@
                 if (this.resource !== 'jobs') return;
 
                 this.updateEntriesTimeout = setTimeout(() => {
-                    console.warn(this.entries);
+
                 let uuids = _.chain(this.entries)
-                    .forEach(entry => console.warn(entry))
                     .filter(entry => entry?.content?.status === 'pending')
                     .map('id')
                     .value();
@@ -241,7 +245,7 @@
                             this.recordingStatus = response.data.status;
 
                             this.entries = _.map(this.entries, entry => {
-                                if (!_.includes(uuids, entry.id)) return entry;
+                                if (!entry || !_.includes(uuids, entry.id)) return entry;
 
                                 return _.find(response.data.entries, {id: entry.id});
                             });
